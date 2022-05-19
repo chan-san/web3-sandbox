@@ -1,10 +1,9 @@
 const fetch = require('node-fetch')
 const { setTimeout } = require('timers/promises');
 
-const getLogs = async () => {
+const getLogs = async (fromBlock) => {
 	let ret = []
 	let i = 1
-	let fromBlock = null
 
 	while(1) {
 		const s = await fetch(`https://api.bscscan.com/api?module=logs&action=getLogs&topic0=0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef&topic1=0x0000000000000000000000000000000000000000000000000000000000000000&address=0x69d60ad11feb699fe5feeeb16ac691df090bfd50&apikey=${process.env.API_KEY}&fromBlock=${fromBlock}`)
@@ -23,7 +22,7 @@ const getLogs = async () => {
 		i = (i + 1) % 5
 	}
 
-  console.log(ret.map((r) => `${r.timestamp}\t${r.transactionHash}`).join("\n"))
+  console.log(ret.map((r) => `${r.timestamp}\t${r.blockNumber}\t${r.transactionHash}`).join("\n"))
 	return ret
 }
 
